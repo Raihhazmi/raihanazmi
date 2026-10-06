@@ -1,0 +1,140 @@
+@import "tailwindcss";
+
+/* ==========================================================================
+   DESIGN TOKENS
+   Source of truth for the whole portfolio. Defined in `@theme` so every token
+   is emitted as a real CSS custom property on :root (usable via var(--...))
+   AND registered as a Tailwind utility (bg-bg, text-accent, max-w-page, ...).
+   ========================================================================== */
+
+@theme {
+  /* --- Color --------------------------------------------------------- */
+  /* Three accent tokens, three contrast jobs:
+     accent         -> fills, hairline borders, oversized display type
+     accent-strong  -> accent-coloured SMALL text; the bright accent is only
+                       3.11:1 on --color-bg and fails WCAG AA at 13px
+     accent-ink     -> text placed ON an accent fill; --color-text would be
+                       2.52:1 in dark mode, so this stays near-black in both */
+  --color-bg: #f7f6f3;
+  --color-surface: #ffffff;
+  --color-text: #101010;
+  --color-text-muted: #6b6b68;
+  --color-accent: #ff4a1c;
+  --color-accent-strong: #b8300c;
+  --color-accent-ink: #14100e;
+  --color-line: #e3e1db;
+
+  /* --- Typography ---------------------------------------------------- */
+  /* Preferred faces are declared but not bundled; today the stack resolves
+     to the system grotesk. Self-host or swap later without touching usage. */
+  --font-display: "Inter Tight", "Helvetica Neue", Helvetica, Arial, ui-sans-serif,
+    system-ui, sans-serif;
+  --font-body: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI",
+    Roboto, sans-serif;
+  --font-mono: "SFMono-Regular", ui-monospace, Consolas, "Liberation Mono",
+    monospace;
+
+  --text-display: clamp(3rem, 11vw, 8.5rem);
+  --text-display--line-height: 0.92;
+  --text-display--letter-spacing: -0.04em;
+
+  --text-h2: clamp(2rem, 5vw, 3.5rem);
+  --text-h2--line-height: 1.05;
+  --text-h2--letter-spacing: -0.025em;
+
+  --text-h3: clamp(1.375rem, 2.4vw, 1.75rem);
+  --text-h3--line-height: 1.2;
+  --text-h3--letter-spacing: -0.015em;
+
+  --text-body: 1.0625rem;
+  --text-body--line-height: 1.7;
+
+  --text-meta: 0.8125rem;
+  --text-meta--line-height: 1.4;
+  --text-meta--letter-spacing: 0.02em;
+
+  /* --- Spacing ------------------------------------------------------- */
+  --spacing-section: clamp(5rem, 12vw, 11rem);
+  --spacing-gutter: clamp(1.25rem, 4vw, 3rem);
+
+  /* --- Layout -------------------------------------------------------- */
+  --container-page: 90rem;
+  --container-text: 44rem;
+}
+
+/* Dark mode: unlayered, so it overrides the @theme layer at any position. */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-bg: #0b0b0c;
+    --color-surface: #151517;
+    --color-text: #f2f2f0;
+    --color-text-muted: #9a9a96;
+    --color-accent: #ff6b3d;
+    --color-accent-strong: #ff6b3d;
+    --color-line: #26262a;
+  }
+}
+
+/* ==========================================================================
+   BASE
+   ========================================================================== */
+
+@layer base {
+  html {
+    color-scheme: light dark;
+    -webkit-text-size-adjust: 100%;
+    /* In-page anchors only — there is no router. The reduced-motion block
+       below forces this back to `auto` when the user asks for it. */
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: var(--color-bg);
+    color: var(--color-text);
+    font-family: var(--font-body);
+    font-size: var(--text-body);
+    line-height: var(--text-body--line-height);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-display);
+    font-weight: 500;
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  ::selection {
+    background-color: var(--color-accent);
+    color: var(--color-bg);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 3px;
+  }
+}
+
+/* ==========================================================================
+   REDUCED MOTION
+   Global CSS safety net. GSAP animations are additionally skipped at runtime
+   by prefersReducedMotion() in src/lib/motion.ts — this covers plain CSS
+   transitions and any future CSS-driven motion.
+   ========================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
