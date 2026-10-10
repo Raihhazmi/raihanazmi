@@ -1,7 +1,28 @@
 {
-  "name": "cli",
+  "name": "raihanazmi-portfolio",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
+  "description": "Personal portfolio of Raihan Azmi — AI-Native System Architect & Mobile Product Developer. Single-page site built with Vite, React, TypeScript, Tailwind CSS and GSAP.",
+  "author": "Muhammad Raihan Azmi <raihanazmi.official@gmail.com>",
+  "license": "UNLICENSED",
+  "homepage": "https://raihanazmi.dev",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Raihhazmi/raihanazmi.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Raihhazmi/raihanazmi/issues"
+  },
+  "keywords": [
+    "portfolio",
+    "raihan-azmi",
+    "system-architect",
+    "mobile-developer",
+    "react",
+    "vite",
+    "tailwindcss",
+    "gsap"
+  ],
   "type": "module",
   "scripts": {
     "dev": "vite",
