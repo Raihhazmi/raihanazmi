@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 700" width="1000" height="700" role="img" aria-label="Abstract editorial plate">
+  <rect width="1000" height="700" fill="#faf9f5" />
+  <g fill="none" stroke="#0c0c0c" stroke-width="2">
+    <rect x="80" y="70" width="840" height="560" stroke-opacity="0.25" />
+    <rect x="150" y="140" width="700" height="420" stroke-opacity="0.4" />
+    <rect x="220" y="210" width="560" height="280" stroke-opacity="0.6" />
+    <rect x="290" y="280" width="420" height="140" stroke-opacity="0.85" />
+  </g>
+  <circle cx="500" cy="350" r="42" fill="#ff4a1c" />
+  <text x="80" y="660" font-family="monospace" font-size="26" letter-spacing="6" fill="#0c0c0c" fill-opacity="0.55">05</text>
+</svg>

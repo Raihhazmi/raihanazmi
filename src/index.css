@@ -4,75 +4,93 @@
    DESIGN TOKENS
    Source of truth for the whole portfolio. Defined in `@theme` so every token
    is emitted as a real CSS custom property on :root (usable via var(--...))
-   AND registered as a Tailwind utility (bg-bg, text-accent, max-w-page, ...).
+   AND registered as a Tailwind utility (bg-paper, text-accent, max-w-page...).
    ========================================================================== */
 
 @theme {
-  /* --- Color --------------------------------------------------------- */
-  /* Three accent tokens, three contrast jobs:
-     accent         -> fills, hairline borders, oversized display type
-     accent-strong  -> accent-coloured SMALL text; the bright accent is only
-                       3.11:1 on --color-bg and fails WCAG AA at 13px
-     accent-ink     -> text placed ON an accent fill; --color-text would be
-                       2.52:1 in dark mode, so this stays near-black in both */
-  --color-bg: #f7f6f3;
-  --color-surface: #ffffff;
+  /* --- Editorial palette --------------------------------------------- */
+  /* Two papers and one ink. Sections alternate paper <-> ink for rhythm;
+     `.tone-light` / `.tone-dark` (below) swap the semantic text tokens so a
+     component never has to know which band it sits on. */
+  --color-paper: #faf9f5;
+  --color-paper-2: #f2f0e9;
+  --color-ink: #0c0c0c;
+  --color-ink-2: #141414;
+
+  --color-page: #faf9f5;
   --color-text: #101010;
   --color-text-muted: #6b6b68;
   --color-accent: #ff4a1c;
   --color-accent-strong: #b8300c;
   --color-accent-ink: #14100e;
-  --color-line: #e3e1db;
+  --color-line: rgb(16 16 16 / 0.16);
 
   /* --- Typography ---------------------------------------------------- */
-  /* Preferred faces are declared but not bundled; today the stack resolves
-     to the system grotesk. Self-host or swap later without touching usage. */
-  --font-display: "Inter Tight", "Helvetica Neue", Helvetica, Arial, ui-sans-serif,
-    system-ui, sans-serif;
+  --font-display: "Playfair Display", "Times New Roman", Times, Georgia, serif;
   --font-body: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI",
     Roboto, sans-serif;
   --font-mono: "SFMono-Regular", ui-monospace, Consolas, "Liberation Mono",
     monospace;
 
+  --text-mega: clamp(3.5rem, 13vw, 11rem);
+  --text-mega--line-height: 0.9;
+  --text-mega--letter-spacing: -0.045em;
+
   --text-display: clamp(3rem, 11vw, 8.5rem);
   --text-display--line-height: 0.92;
   --text-display--letter-spacing: -0.04em;
 
-  --text-h2: clamp(2rem, 5vw, 3.5rem);
-  --text-h2--line-height: 1.05;
-  --text-h2--letter-spacing: -0.025em;
+  --text-h2: clamp(2.25rem, 6vw, 4.5rem);
+  --text-h2--line-height: 1.02;
+  --text-h2--letter-spacing: -0.03em;
 
-  --text-h3: clamp(1.375rem, 2.4vw, 1.75rem);
-  --text-h3--line-height: 1.2;
-  --text-h3--letter-spacing: -0.015em;
+  --text-h3: clamp(1.5rem, 3vw, 2.25rem);
+  --text-h3--line-height: 1.15;
+  --text-h3--letter-spacing: -0.02em;
 
   --text-body: 1.0625rem;
   --text-body--line-height: 1.7;
 
-  --text-meta: 0.8125rem;
-  --text-meta--line-height: 1.4;
-  --text-meta--letter-spacing: 0.02em;
+  --text-meta: 0.75rem;
+  --text-meta--line-height: 1.45;
+  --text-meta--letter-spacing: 0.16em;
 
   /* --- Spacing ------------------------------------------------------- */
-  --spacing-section: clamp(5rem, 12vw, 11rem);
-  --spacing-gutter: clamp(1.25rem, 4vw, 3rem);
+  --spacing-section: clamp(5rem, 11vw, 10rem);
+  --spacing-gutter: clamp(1.25rem, 4vw, 3.5rem);
 
   /* --- Layout -------------------------------------------------------- */
-  --container-page: 90rem;
+  --container-page: 96rem;
   --container-text: 44rem;
 }
 
-/* Dark mode: unlayered, so it overrides the @theme layer at any position. */
-@media (prefers-color-scheme: dark) {
-  :root {
-    --color-bg: #0b0b0c;
-    --color-surface: #151517;
-    --color-text: #f2f2f0;
-    --color-text-muted: #9a9a96;
-    --color-accent: #ff6b3d;
-    --color-accent-strong: #ff6b3d;
-    --color-line: #26262a;
-  }
+/* ==========================================================================
+   SECTION TONES
+   Unlayered so they reliably win the cascade for their own subtree. Overriding
+   the semantic custom properties here re-skins every descendant utility
+   (text-text, border-line, bg-accent, ...) without touching components.
+   ========================================================================== */
+
+.tone-light {
+  --color-page: var(--color-paper);
+  --color-text: #101010;
+  --color-text-muted: #6b6b68;
+  --color-line: rgb(16 16 16 / 0.16);
+  --color-accent: #ff4a1c;
+  --color-accent-strong: #b8300c;
+  background-color: var(--color-paper);
+  color: #101010;
+}
+
+.tone-dark {
+  --color-page: var(--color-ink);
+  --color-text: #f4f2ec;
+  --color-text-muted: #9c9a93;
+  --color-line: rgb(255 255 255 / 0.16);
+  --color-accent: #ff6b3d;
+  --color-accent-strong: #ff8a5f;
+  background-color: var(--color-ink);
+  color: #f4f2ec;
 }
 
 /* ==========================================================================
@@ -81,21 +99,21 @@
 
 @layer base {
   html {
-    color-scheme: light dark;
+    color-scheme: light;
     -webkit-text-size-adjust: 100%;
-    /* In-page anchors only — there is no router. The reduced-motion block
-       below forces this back to `auto` when the user asks for it. */
+    /* In-page anchors only — there is no router. */
     scroll-behavior: smooth;
   }
 
   body {
-    background-color: var(--color-bg);
+    background-color: var(--color-paper);
     color: var(--color-text);
     font-family: var(--font-body);
     font-size: var(--text-body);
     line-height: var(--text-body--line-height);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
   }
 
   h1,
@@ -110,9 +128,14 @@
     text-wrap: pretty;
   }
 
+  /* Sticky header offset for every anchored section. */
+  :where(section[id], [id="top"]) {
+    scroll-margin-top: 5.5rem;
+  }
+
   ::selection {
     background-color: var(--color-accent);
-    color: var(--color-bg);
+    color: var(--color-paper);
   }
 
   :focus-visible {
@@ -124,8 +147,7 @@
 /* ==========================================================================
    REDUCED MOTION
    Global CSS safety net. GSAP animations are additionally skipped at runtime
-   by prefersReducedMotion() in src/lib/motion.ts — this covers plain CSS
-   transitions and any future CSS-driven motion.
+   by prefersReducedMotion() in src/lib/motion.ts.
    ========================================================================== */
 
 @media (prefers-reduced-motion: reduce) {

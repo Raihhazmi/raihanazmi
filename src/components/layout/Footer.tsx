@@ -1,43 +1,46 @@
-import { siteContent } from '../../lib/content'
-import { primaryNav } from '../../lib/nav'
 import { Container } from './Container'
+import { primaryNav } from '../../lib/nav'
+import { siteContent } from '../../lib/content'
+
+const { site, person } = siteContent
+const year = new Date().getFullYear()
 
 export function Footer() {
-  const { site, person } = siteContent
-
   return (
-    <footer className="border-t border-line">
-      <Container className="flex flex-col gap-9 py-10 sm:flex-row sm:items-start sm:justify-between">
-        <div>
-          <p className="font-display text-h3 tracking-tight">{person.name}</p>
-          <p className="mt-3 max-w-text text-body text-text-muted">
-            {person.positioning.full}
-          </p>
-          <p className="mt-5 font-mono text-meta text-text-muted uppercase tracking-[0.18em]">
-            {site.domain}
-          </p>
+    <footer className="tone-dark border-t border-line py-12">
+      <Container className="flex flex-col gap-10">
+        <div className="flex flex-wrap items-end justify-between gap-8">
+          <div>
+            <p className="font-display text-h2 leading-none">{person.name}</p>
+            <p className="mt-3 font-mono text-meta uppercase tracking-[0.18em] text-text-muted">
+              {site.domain}
+            </p>
+          </div>
+
+          <nav aria-label="Footer">
+            <ul className="flex flex-wrap gap-x-6 gap-y-3">
+              {primaryNav.map((link) => (
+                <li key={link.href}>
+                  <a
+                    href={link.href}
+                    className="font-mono text-meta uppercase tracking-[0.18em] text-text-muted transition-colors duration-300 hover:text-accent-strong"
+                  >
+                    {link.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </nav>
         </div>
 
-        <nav aria-label="Footer">
-          <ul className="flex flex-wrap gap-x-7 gap-y-4">
-            {primaryNav.map((link) => (
-              <li key={link.href}>
-                <a
-                  href={link.href}
-                  className="font-mono text-meta text-text-muted uppercase tracking-[0.18em] transition-colors duration-300 hover:text-accent-strong"
-                >
-                  {link.label}
-                </a>
-              </li>
-            ))}
-          </ul>
-        </nav>
-      </Container>
-
-      <Container className="border-t border-line py-6">
-        <p className="font-mono text-meta text-text-muted uppercase tracking-[0.18em]">
-          © {new Date().getFullYear()} {person.fullName}
-        </p>
+        <div className="flex flex-wrap items-center justify-between gap-4 border-t border-line pt-6">
+          <p className="font-mono text-meta uppercase tracking-[0.18em] text-text-muted">
+            © {year} {person.fullName}
+          </p>
+          <p className="font-mono text-meta uppercase tracking-[0.18em] text-text-muted">
+            {site.tagline}
+          </p>
+        </div>
       </Container>
     </footer>
   )

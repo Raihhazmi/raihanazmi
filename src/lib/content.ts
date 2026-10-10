@@ -1,18 +1,14 @@
 /**
  * Content architecture — the single source of truth for portfolio copy and
- * structured data.
- *
- * Stage 3.5 is content-first: the About, Experience, Education, Projects and
- * Recognition sections do NOT exist yet. They will read from this file in a
- * later stage so no component ever has to hard-code facts again.
- *
- * Rules that produced this data:
- *  - Nothing is invented. Dates, metrics, clients, awards and job
- *    descriptions only appear when explicitly confirmed.
- *  - Employer entries carry public metadata only: no hosts, IPs,
- *    credentials, internal systems, endpoints or confidential material.
- *  - No database, CMS, API or state layer. This is plain source code.
+ * structured data. Components read facts from here; nothing is invented.
  */
+
+import plate01 from '../assets/gallery/plate-01.svg'
+import plate02 from '../assets/gallery/plate-02.svg'
+import plate03 from '../assets/gallery/plate-03.svg'
+import plate04 from '../assets/gallery/plate-04.svg'
+import plate05 from '../assets/gallery/plate-05.svg'
+import plate06 from '../assets/gallery/plate-06.svg'
 
 export interface Period {
   start: string
@@ -20,13 +16,9 @@ export interface Period {
 }
 
 export interface Positioning {
-  /** Full sentence used for meta tags and section intros. */
   full: string
-  /** Display-headline lines, one per rendered row. */
   headline: readonly string[]
-  /** Accent-coloured token that opens the secondary line. */
   accent: string
-  /** Remaining words on the secondary line. */
   suffix: string
 }
 
@@ -48,22 +40,23 @@ export interface EducationEntry {
   focus: readonly string[]
 }
 
+export interface ProjectLink {
+  label: string
+  href: string
+}
+
 export interface ProjectEntry {
   id: string
+  no: string
   name: string
   category: string
   role: string
   platform: string
   technologies: readonly string[]
   summary: string
-  /**
-   * BCP 47 tag for the summary's language. Several summaries are written in
-   * Indonesian while the page itself is English — declaring this lets a screen
-   * reader switch pronunciation instead of mangling both.
-   */
   summaryLang?: 'en' | 'id'
   contributions: readonly string[]
-  /** Editorial hierarchy for the Work section: one project leads, the rest sit secondary. */
+  links: readonly ProjectLink[]
   featured?: boolean
 }
 
@@ -88,6 +81,15 @@ export interface SocialLink {
   href: string
 }
 
+export interface GalleryEntry {
+  id: string
+  no: string
+  label: string
+  caption: string
+  src: string
+  aspect: 'portrait' | 'landscape' | 'square'
+}
+
 const site = {
   domain: 'raihanazmi.dev',
   tagline: 'Digital products · Systems · Mobile apps',
@@ -105,9 +107,17 @@ const positioning = {
 const person = {
   fullName: 'Muhammad Raihan Azmi',
   name: 'Raihan Azmi',
+  shortName: 'Raihan',
   email: 'raihanazmi.official@gmail.com',
+  location: { city: 'Banjarmasin', region: 'Indonesia', timeZone: 'Asia/Makassar' },
   positioning,
 }
+
+const hero = {
+  greeting: 'Halo, aku',
+  kanji: '創',
+  intro: site.summary,
+} as const
 
 const experience: ExperienceEntry[] = [
   {
@@ -136,9 +146,12 @@ const education: EducationEntry[] = [
   },
 ]
 
+const githubProfile = 'https://github.com/Raihhazmi'
+
 const projects: ProjectEntry[] = [
   {
     id: 'forestguard',
+    no: '01',
     name: 'ForestGuard',
     category: 'Environmental Crowdsourcing Platform',
     role: 'System Architect & Product Designer',
@@ -154,10 +167,12 @@ const projects: ProjectEntry[] = [
       'UI/UX',
       'AI-assisted integration workflow',
     ],
+    links: [{ label: 'GitHub', href: githubProfile }],
     featured: true,
   },
   {
     id: 'cityevent',
+    no: '02',
     name: 'CityEvent',
     category: 'Hyperlocal Event Discovery',
     role: 'Lead Mobile Developer',
@@ -172,9 +187,11 @@ const projects: ProjectEntry[] = [
       'UI/UX',
       'state management',
     ],
+    links: [{ label: 'GitHub', href: githubProfile }],
   },
   {
     id: 'smartpay',
+    no: '03',
     name: 'SmartPay',
     category: 'UMKM Point of Sales System',
     role: 'Lead Mobile Developer',
@@ -191,6 +208,7 @@ const projects: ProjectEntry[] = [
       'PDF export',
       'biometric security',
     ],
+    links: [{ label: 'GitHub', href: githubProfile }],
   },
 ]
 
@@ -252,7 +270,7 @@ const skills: SkillGroup[] = [
 ]
 
 const socials: SocialLink[] = [
-  { id: 'github', label: 'GitHub', href: 'https://github.com/Raihhazmi' },
+  { id: 'github', label: 'GitHub', href: githubProfile },
   {
     id: 'linkedin',
     label: 'LinkedIn',
@@ -260,14 +278,57 @@ const socials: SocialLink[] = [
   },
 ]
 
-/**
- * About narrative. Editorial prose rather than structured facts, but it lives
- * here for the same reason the rest does: one source of truth, no copy
- * duplicated between sections.
- *
- * Every claim traces back to confirmed data — no numbers, clients, employers,
- * metrics or years of experience that were not explicitly given.
- */
+const gallery: GalleryEntry[] = [
+  {
+    id: 'plate-01',
+    no: '01',
+    label: 'Portrait',
+    caption: 'Studio — ink study',
+    src: plate01,
+    aspect: 'portrait',
+  },
+  {
+    id: 'plate-02',
+    no: '02',
+    label: 'Landscape',
+    caption: 'Horizon field',
+    src: plate02,
+    aspect: 'landscape',
+  },
+  {
+    id: 'plate-03',
+    no: '03',
+    label: 'Series',
+    caption: 'Vertical rhythm',
+    src: plate03,
+    aspect: 'square',
+  },
+  {
+    id: 'plate-04',
+    no: '04',
+    label: 'Portrait',
+    caption: 'Split light',
+    src: plate04,
+    aspect: 'portrait',
+  },
+  {
+    id: 'plate-05',
+    no: '05',
+    label: 'Frame',
+    caption: 'Nested rooms',
+    src: plate05,
+    aspect: 'landscape',
+  },
+  {
+    id: 'plate-06',
+    no: '06',
+    label: 'Grid',
+    caption: 'Dot matrix',
+    src: plate06,
+    aspect: 'square',
+  },
+]
+
 const about = {
   title: 'Designed as a system. Shipped as a product.',
   lede: 'An AI-Native System Architect and Mobile Product Developer working across system architecture, digital products, and mobile applications.',
@@ -281,6 +342,7 @@ const about = {
 export const siteContent = {
   site,
   person,
+  hero,
   about,
   experience,
   education,
@@ -288,4 +350,5 @@ export const siteContent = {
   recognition,
   skills,
   socials,
+  gallery,
 }

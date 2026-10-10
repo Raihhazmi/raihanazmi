@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 700" width="1000" height="700" role="img" aria-label="Abstract editorial plate">
+  <rect width="1000" height="700" fill="#0c0c0c" />
+  <g fill="none" stroke="#f4f2ec" stroke-opacity="0.35" stroke-width="2">
+    <path d="M500 620a180 180 0 0 1 360 0" />
+    <path d="M500 620a260 260 0 0 1 520 0" />
+    <path d="M500 620a340 340 0 0 1 680 0" />
+    <path d="M500 620a420 420 0 0 1 840 0" />
+  </g>
+  <path d="M0 620H1000" stroke="#ff6b3d" stroke-width="3" />
+  <text x="60" y="96" font-family="monospace" font-size="26" letter-spacing="6" fill="#f4f2ec" fill-opacity="0.6">02</text>
+</svg>
